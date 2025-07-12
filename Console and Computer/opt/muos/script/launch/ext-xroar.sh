@@ -31,6 +31,11 @@ export SDL_GAMECONTROLLERCONFIG_FILE="/usr/lib/gamecontrollerdb.txt"
 
 SET_VAR "system" "foreground_process" "xroar"
 
+#set emulator machine model, default to coco2 if selecting xroar profile
+MACHINE="-default-machine coco2bus"
+if [[ $CORE != "xroar" && $CORE != "ext-xroar" ]]; then
+	MACHINE="-default-machine $CORE"
+fi
 
 /opt/muos/script/mux/track.sh "$NAME" "$CORE" "$FILE" start
 
@@ -39,7 +44,7 @@ SET_VAR "system" "foreground_process" "xroar"
 	else
 		$GPTOKEYB "xroar" -c "$XROAR_DIR/gptk/xroar.gptk" &
 	fi
-	$XROAR_DIR/xroar -c "$XROAR_DIR/xroar.conf" "$FILE"
+	$XROAR_DIR/xroar -c "$XROAR_DIR/xroar.conf" $MACHINE "$FILE"
 
 killall -q gptokeyb2
 
